@@ -8,21 +8,21 @@ const auth = async (req, res, next) => {
         const user = await User.findOne({ _id: decoded.id, 'tokens.token': token });
 
         if (!user) throw new Error();
-        req.user = user;
         req.token = token;
+        req.user = user;
         next();
     } catch (e) {
         res.status(401).send({ error: 'Please authenticate.' });
     }
 };
 
-const authorize = (roles) => {
+const authorizeRoles = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {
-            return res.status(403).send('Access denied.');
+            return res.status(403).send({ error: 'Access denied.' });
         }
         next();
-    }
+    };
 };
 
-module.exports = { auth, authorize };
+module.exports = { auth, authorizeRoles };

@@ -6,13 +6,15 @@ const ProductSchema = new mongoose.Schema({
     category: { type: String, required: true },
     startDate: { type: Date, required: true },
     expiryDate: { type: Date, required: true },
-    deliveryAmount: { type: Number, default: 0 },
-    freeDelivery: { type: Boolean, default: false },
+    delivery: {
+        isFree: { type: Boolean, default: false },
+        amount: { type: Number, default: 0 }
+    },
+    images: [{ type: String }],
+    url: { type: String, required: true, unique: true },
     oldPrice: { type: Number, required: true },
     newPrice: { type: Number, required: true },
-    images: [{ type: String }],
-    vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    url: { type: String, required: true, unique: true },
+    vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 module.exports = mongoose.model('Product', ProductSchema);

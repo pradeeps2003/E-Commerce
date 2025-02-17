@@ -1,14 +1,12 @@
 const Product = require('../models/Product');
 
-const addProduct = async (req, res) => {
-    const { name, description, category, startDate, expiryDate, deliveryAmount, freeDelivery, oldPrice, newPrice, images, url } = req.body;
-    try {
-        const product = new Product({ name, description, category, startDate, expiryDate, deliveryAmount, freeDelivery, oldPrice, newPrice, images, vendor: req.user._id, url });
-        await product.save();
-        res.status(201).send(product);
-    } catch (err) {
-        res.status(400).send(err);
-    }
+exports.addProduct = async (req, res) => {
+    const product = new Product({ ...req.body, vendor: req.user._id });
+    await product.save();
+    res.status(201).send(product);
 };
 
-module.exports = { addProduct };
+exports.viewProducts = async (req, res) => {
+    const products = await Product.find({ vendor: req.user._id });
+    res.send(products);
+};

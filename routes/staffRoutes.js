@@ -1,11 +1,8 @@
 const express = require('express');
-const { auth, authorize } = require('../middleware/authMiddleware');
 const { addProduct } = require('../controllers/staffController');
+const { auth, authorizeRoles } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.use(auth);
-router.use(authorize(['staff']));
-
-router.post('/products', addProduct);
+router.post('/products', auth, authorizeRoles('staff'), addProduct);
 
 module.exports = router;
