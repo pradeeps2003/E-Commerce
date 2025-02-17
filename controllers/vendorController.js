@@ -1,12 +1,27 @@
-const Product = require('../models/Product');
-
-exports.addProduct = async (req, res) => {
-    const product = new Product({ ...req.body, vendor: req.user._id });
-    await product.save();
-    res.status(201).send(product);
-};
-
 exports.viewProducts = async (req, res) => {
-    const products = await Product.find({ vendor: req.user._id });
-    res.send(products);
+    try {
+        let { page = 1, limit = 10, search = '' } = req.query;
+        page = parseInt(page);
+        limit = parseInt(limit);
+
+        const query = {
+            vendor: req.user._id,
+            ...(search ? { name: { $regex: search, $options: 'i' } } : {})
+        };
+
+        const products = await Product.find(query)
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        const total = await Product.countDocuments(query);
+
+        res.json({
+            products,
+            total,
+            page,
+            totalPages: Math.ceil(total / limit),
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error' });
+    }
 };
