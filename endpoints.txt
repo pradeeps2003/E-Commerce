@@ -1,0 +1,23 @@
+📌 API Endpoints List
+All routes are prefixed with /api.
+
+🔐 Authentication APIs
+Method	Endpoint	Description	Access
+POST	/api/auth/signup	User registration (Admin, Staff, Vendor, Buyer)	Public
+POST	/api/auth/login	User login	Public
+👨‍💼 Admin APIs
+Method	Endpoint	Description	Access
+POST	/api/admin/products	Create a product	Admin
+GET	/api/admin/users?page=1&limit=10	Get all users (pagination & search)	Admin
+DELETE	/api/admin/users/:id	Delete a user	Admin
+👷 Staff APIs
+Method	Endpoint	Description	Access
+POST	/api/staff/products	Add a product	Staff
+GET	/api/staff/products?page=1&limit=10	View products	Staff
+🛍️ Vendor APIs
+Method	Endpoint	Description	Access
+POST	/api/vendor/products	Add a product	Vendor
+GET	/api/vendor/products?page=1&limit=10	View vendor products (pagination & search)	Vendor
+🛒 User APIs
+Method	Endpoint	Description	Access
+GET	/api/user/products?page=1&limit=10&search=laptop	View all products with pagination & search	User
